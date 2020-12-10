@@ -1,56 +1,59 @@
-import sqlite3
-from collections import Counter
+import time
+from person import Star
+import bacon_functions
+import input_check
+import sys
 
-# Connecting to database
-db = sqlite3.connect('movies.db')
-cursor = db.cursor()
+#seth allen and kevin bacon??
+sys.setrecursionlimit(1500)
 
 # Getting names for Bacon Number generator
 person = input("Enter a movie star: ")
+person = person.lower()
 person2 = input("Enter another movie star: ")
+person2 = person2.lower()
 
-# Getting numerical id's of given names
-cursor.execute("""SELECT name, id, birth FROM people WHERE ? = people.name OR ? = 
-               people.name AND people.birth IS NOT NULL""", (person, person2,))
+# Checking names are valid & that no more than one name is returned from database for each input
+person_id = input_check.input_check(person, person2)
 
-person_id = cursor.fetchall()
-person_id = list(person_id)
+start_time = time.time()
 
-# Making sure names only returned 1 id each
-if len(person_id) > 2:
-    person_count = Counter(elem[0] for elem in person_id)
+# Getting list of one inputs co_stars to search for. More efficient than search for just their ID
+co_stars_list = bacon_functions.find_list(person_id)
 
-    # If more than 2 id's returned check which same name actor was wanted
-    question_names = []
-    for key, value in person_count.items():
-        print(key, value)
-        if value > 1:
-            for item in person_id:
-                if key in item:
-                    question_names.append(item)
+# co_stars_list but with just the IDs
+co_stars_id_list = []
+for item in co_stars_list:
+    co_stars_id_list.append(item[0])
 
-    # Clear person_id for refill with only two correct people
-    person_id.clear()
+# Creating star object to record details of one of the given film stars
+star_objects_dict = {}
+star_objects_dict[person_id[0][1]] = Star(person_id[0][0], person_id[0][1], [])
+checked_list = []
+to_check = []
 
-    # Create temporary list for names that are the same
-    temp_list = []
-    for i in question_names:
-        for j in question_names:
-            if i[0] == j[0]:
-                temp_list.append(j)
-        for k in question_names:
-            if k[0] == temp_list[0][0]:
-                question_names.remove(k)
+solved_list = bacon_functions.bacon_query(co_stars_id_list, star_objects_dict[person_id[0][1]],
+                                          star_objects_dict, checked_list, to_check)
 
-        # Use temporary list to ask user to confirm which person they meant
-        print(f"Which {temp_list[0][0]} did you mean?")
-        for counter, person in enumerate(temp_list):
-            print(str(counter + 1) + ".", person[0], person[2])
-        confirmed_person = 0
-        while 1 > confirmed_person or confirmed_person > len(temp_list):
-            confirmed_person = int(input("Enter number starting at 1 to select from list: "))
-        confirmed_person -= 1
-        person_id.append(temp_list[confirmed_person])
-        temp_list.clear()
-print(person_id)
+# Insert the film star being looked for into solved list
+# Query so far will have only found one of their co_stars
+for i in co_stars_list:
+    if i[0] == solved_list[0][0]:
+        solved_list.insert(0, [person_id[1][1], person_id[1][0], i[2]])
 
+print(solved_list)
+# Calculate and print steps between 2 film stars
+steps = len(solved_list) - 2
+if steps == 1:
+    print(f"There is {steps} step between {person_id[1][0]} and {person_id[0][0]}")
+else:
+    print(f"There are {steps} steps between {person_id[1][0]} and {person_id[0][0]}")
+
+# Print route solution
+for j in range(len(solved_list) - 1):
+    if j == 0:
+        print(f"{solved_list[j][1]} starred in {solved_list[j][2]} with {solved_list[j + 1][1]}")
+    else:
+        print(f"who starred in {solved_list[j][2]} with {solved_list[j + 1][1]}")
+
+print(f"This program took", {time.time() - start_time}, "to run")
