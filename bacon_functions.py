@@ -25,21 +25,36 @@ def duplicate_remove(co_star_list, person_id):
 
 # Creates list of one inputs co_stars so can search for all their costars rather than just one ID
 def find_list(person_id):
-    # SQL query pulls all people that have starred in a film with one of the inputs
-    cursor.execute("""SELECT person_id, name, movies.title FROM movies JOIN stars JOIN people 
-                      ON movies.id = stars.movie_id AND stars.person_id = people.id
-                      WHERE movies.id IN (SELECT movies.id FROM movies JOIN stars ON movies.id = stars.movie_id
-                      WHERE stars.person_id =?)""", (person_id[1][1],))
 
-    print(person_id[1][1])
+    # List for storing both peoples co_stars lists to assess length
+    length = []
+    for i in person_id:
+        # SQL query pulls all people that have starred in a film with one of the inputs
+        cursor.execute("""SELECT person_id, name, movies.title FROM movies JOIN stars JOIN people 
+                          ON movies.id = stars.movie_id AND stars.person_id = people.id
+                          WHERE movies.id IN (SELECT movies.id FROM movies JOIN stars ON movies.id = stars.movie_id
+                          WHERE stars.person_id = ?)""", (i[1],))
 
-    # Variable holds all co-stars returned by this query
-    costars_list = cursor.fetchall()
+        # Variable holds all co-stars returned by this query
+        costars_list = cursor.fetchall()
+        if len(costars_list) == 0:
+            print(i[0], "cannot be linked to any other actor as they have never starred anyone else.")
+            exit()
+        length.append([i, costars_list])
+
+    # Want to search for person with more co stars and search from person with less
+    if len(length[0][1]) > len(length[1][1]):
+        person_id[0], person_id[1] = person_id[1], person_id[0]
+        costars_list = length[0][1]
+    else:
+        costars_list = length[1][1]
+
     costars_list = [list(elem) for elem in costars_list]
 
-    # Removing duplicate people in stars_person_id
+    # Removing duplicate people in costars_list
     costars_list = duplicate_remove(costars_list, person_id)
 
+    # Assess if the two people have starred in a film together
     for row in costars_list:
         if person_id[0][1] == row[0]:
             print(f"There are no steps between {person_id[0][0]} and {person_id[1][0]}")
@@ -48,7 +63,7 @@ def find_list(person_id):
 
     costars_list.insert(0, person_id[1])
 
-    return costars_list
+    return costars_list, person_id
 
 
 # Recursive search through objects for correct route between two stars
@@ -126,5 +141,8 @@ def bacon_query(find_id, star_object, star_dictionary, check_list, to_be_checked
     for o in to_be_checked:
         if o not in check_list:
             print("Calling bacon query on", star_dictionary[o].name)
-            solved_list = bacon_query(find_id, star_dictionary[o], star_dictionary, check_list, to_be_checked)
+            try:
+                solved_list = bacon_query(find_id, star_dictionary[o], star_dictionary, check_list, to_be_checked)
+            except RecursionError:
+                print("No link could be found")
             return solved_list
