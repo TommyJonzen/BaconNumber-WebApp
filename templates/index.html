@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    {% if answer == 0 %}
+        <h1 class="title">Enter Two Film Stars:</h1>
+        <form action="/" method="POST">
+            <div class="row justify-content-center">
+                <div class="form-group col-3">
+                    <input class="form-control" name="star1" placeholder="First film star" type="text">
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="form-group col-3">
+                    <input class="form-control" name="star2" placeholder="Second film star" type="text">
+                </div>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary" id="querybutton" type="submit">Find Route</button>
+            </div>
+        </form>
+    {% else %}
+        <h1 class="title"></h1>
+        {% if answer[0] == 1 %}
+            <h2 class="answer">{{answer[1]}}</h2>
+        {% elif answer[0] == 2 %}
+            <h2 class="answer">{{answer[1][0]}}</h2>
+            <h2 class="answer">{{answer[1][1]}}</h2>
+        {% elif answer[0] == 3 %}
+            <h2 class="answer">{{answer[1]}}</h2>
+        {% elif answer[0] == 5 %}
+            <h2 class="answer">{{answer[1].title()}} is not a valid name.</h2>
+        {% elif answer[0] == 6 %}
+            <h2 class="answer">Both names are invalid.</h2>
+        {% elif answer[0] == 8 %}
+            <h2 class="answer">There is only one movie star named {{answer[1].title()}} and so a route cannot be found.</h2>
+        {% elif answer[0] == 0 %}
+            {% for i in range(1, answer|length) %}
+                <h2 class="answer">{{answer[i]}}</h2>
+            {% endfor %}
+        {% endif %}
+        <form action="/" method="GET">
+        <div class="text-center">
+            <button class="btn btn-primary" id="tryagain" type="submit">Try Again</button>
+        </div>
+        </form>
+    {% endif %}
+<!-- Errors: [1: ], [2: No route needed as inputs have starred in a film together], [3: ], [4: ], [5: One invalid name],
+             [6: Two invalid names], [7: More than two names returned], [8: Entered two of the same name] -->
+{% endblock %}

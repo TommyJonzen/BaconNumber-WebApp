@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    {% if check_list2 == 0 %}
+        <h1 class="title">Please confirm which actor you meant:</h1>
+    {% else %}
+        <h1 class="title">Please confirm which actors you meant:</h1>
+    {% endif %}
+    <form action="/check" method="POST">
+        <div class="row justify-content-center">
+            <div class="form-group col-3 has-feedback">
+                <select class="form-control" name="sel1">
+                    {% for i in range(check_list1|length) %}
+                        <option>{{check_list1[i][0]}}, {{check_list1[i][2]}}<span class="caret"></span></option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        {% if check_list2 != 0 %}
+            <div class="row justify-content-center">
+                <div class="form-group col-3">
+                    <select class="form-control" name="sel2">
+                        {% for j in range(check_list2|length) %}
+                            <option>{{check_list2[j][0]}}, {{check_list2[j][2]}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        {% endif %}
+        <div class="text-center">
+            <button class="btn btn-primary" id="checkbutton" type="submit">Find Route</button>
+        </div>
+    </form>
+{% endblock %}

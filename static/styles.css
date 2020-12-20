@@ -1,0 +1,52 @@
+body
+{
+    background-color: #ffb4a2;
+}
+#main-cont
+{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+h1
+{
+    color: #6d6875;
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+.answer
+{
+    text-align: center;
+    color: #6d6875;
+    padding-bottom: 15px;
+}
+
+.form-group
+{
+    padding-bottom: 20px;
+    left: 70%;
+}
+
+.navbar-custom
+{
+    background-color: #ffcdb2;
+}
+
+
+nav .navbar-brand
+{
+    margin: auto;
+    font-size: 450%;
+}
+nav .navbar-brand .red
+{
+    color: #e5989b;
+}
+nav .navbar-brand .black
+{
+    color: #6d6875;
+}
+

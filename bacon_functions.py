@@ -2,7 +2,7 @@ import sqlite3
 from person import Star
 
 # Connecting to database
-db = sqlite3.connect('movies.db')
+db = sqlite3.connect('movies.db', check_same_thread=False)
 cursor = db.cursor()
 
 
@@ -38,8 +38,7 @@ def find_list(person_id):
         # Variable holds all co-stars returned by this query
         costars_list = cursor.fetchall()
         if len(costars_list) == 0:
-            print(i[0], "cannot be linked to any other actor as they have never starred anyone else.")
-            exit()
+            return 1, i[0]
         length.append([i, costars_list])
 
     # Want to search for person with more co stars and search from person with less
@@ -57,9 +56,8 @@ def find_list(person_id):
     # Assess if the two people have starred in a film together
     for row in costars_list:
         if person_id[0][1] == row[0]:
-            print(f"There are no steps between {person_id[0][0]} and {person_id[1][0]}")
-            print(f'They starred in "{row[2]}" together')
-            exit()
+            return 2, [f"There are no steps between {person_id[0][0]} and {person_id[1][0]}.",
+                       f'They starred in "{row[2]}" together.']
 
     costars_list.insert(0, person_id[1])
 
@@ -68,7 +66,6 @@ def find_list(person_id):
 
 # Recursive search through objects for correct route between two stars
 def solved_search(star_id, solved_list, star_dictionary):
-    print(star_dictionary[star_id].name)
     if len(star_dictionary[star_id].parents) >= 1:
         star_parent = star_dictionary[star_id].parents[-1]
         for i in star_dictionary[star_parent].co_stars:
@@ -123,14 +120,12 @@ def bacon_query(find_id, star_object, star_dictionary, check_list, to_be_checked
     for k in star_object.co_stars:
         if k[0] == find_id[0]:
             solved_list = []
-            print("Solved ID Found")
             solved_list = solved_search(k[0], solved_list, star_dictionary)
             return solved_list
 
     for p in star_object.co_stars:
         if p[0] in find_id:
             solved_list = []
-            print("Solved ID Found")
             solved_list = solved_search(p[0], solved_list, star_dictionary)
             return solved_list
 
@@ -140,9 +135,8 @@ def bacon_query(find_id, star_object, star_dictionary, check_list, to_be_checked
 
     for o in to_be_checked:
         if o not in check_list:
-            print("Calling bacon query on", star_dictionary[o].name)
             try:
                 solved_list = bacon_query(find_id, star_dictionary[o], star_dictionary, check_list, to_be_checked)
             except RecursionError:
-                print("No link could be found")
+                return 3
             return solved_list
