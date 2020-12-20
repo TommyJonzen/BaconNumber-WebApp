@@ -6,7 +6,7 @@ db = sqlite3.connect('movies.db', check_same_thread=False)
 cursor = db.cursor()
 
 
-# Duplicate person remover
+# Duplicate person remover - in order to not check the same name twice
 def duplicate_remove(co_star_list, person_id):
     temp_list = []
     for i in co_star_list:
@@ -23,7 +23,7 @@ def duplicate_remove(co_star_list, person_id):
     return co_star_list
 
 
-# Creates list of one inputs co_stars so can search for all their costars rather than just one ID
+# Creates list of one inputs co_stars so can search from input1 to all of input2 costars rather than just for input2
 def find_list(person_id):
 
     # List for storing both peoples co_stars lists to assess length
@@ -65,6 +65,7 @@ def find_list(person_id):
 
 
 # Recursive search through objects for correct route between two stars
+# Used once a connection has been found to back track the correct route
 def solved_search(star_id, solved_list, star_dictionary):
     if len(star_dictionary[star_id].parents) >= 1:
         star_parent = star_dictionary[star_id].parents[-1]
@@ -116,13 +117,14 @@ def bacon_query(find_id, star_object, star_dictionary, check_list, to_be_checked
     for i in star_object.co_stars:
         star_dictionary[i[0]] = Star(i[1], i[0], parents)
 
-    # Check for find_id, if found create solution path and return
+    # Check for the film star being looked for, if found create solution path and return
     for k in star_object.co_stars:
         if k[0] == find_id[0]:
             solved_list = []
             solved_list = solved_search(k[0], solved_list, star_dictionary)
             return solved_list
 
+    # If film star being looked for isn't found are any of their direct co-stars found instead
     for p in star_object.co_stars:
         if p[0] in find_id:
             solved_list = []
@@ -133,6 +135,7 @@ def bacon_query(find_id, star_object, star_dictionary, check_list, to_be_checked
     for n in star_object.co_stars:
         to_be_checked.append(n[0])
 
+    # As no path has been found recursively search next co-star in list until a solution is found
     for o in to_be_checked:
         if o not in check_list:
             try:

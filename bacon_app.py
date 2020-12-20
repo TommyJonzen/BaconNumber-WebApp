@@ -1,4 +1,3 @@
-import time
 from person import Star
 import bacon_functions
 import input_check
