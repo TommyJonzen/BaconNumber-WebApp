@@ -14,10 +14,11 @@ An installation of Python 3
 change directory into baconquery
 then use the following commands:
 
-* py  -m venv nameofenvironment
-* env\Scripts\activate
+* py  -m venv bacon-env
+* bacon-env\Scripts\activate
 * pip install flask
-* set FLASK_APP = application.py
+* set FLASK_APP=application.py
+* cd ..
 * flask run
 
 Now you can use the IP address given by the console in your browser to visit a locally hosted version.
