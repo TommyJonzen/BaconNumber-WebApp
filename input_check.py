@@ -33,9 +33,11 @@ def input_check(person, person2):
                     return solution
                 else:
                     solution = [5, person2]
+                    print("1")
                     return solution
             else:
                 solution = [5, person]
+                print("2")
                 return solution
 
     # Check that there are at least two different names returned
@@ -46,16 +48,19 @@ def input_check(person, person2):
     if diff_count == 0:
         if person == person_id[0][0].lower():
             solution = [5, person2]
+            print("3")
             return solution
         else:
             solution = [5, person]
+            print("4")
             return solution
 
     # Check in case one input returned nothing but the other returned more than one
     for name in [person, person2]:
-        name_check = any(name.title() in sublist for sublist in person_id)
+        name_check = any(name.lower() in sublist[0].lower() for sublist in person_id)
         if not name_check:
             solution = [5, name]
+            print("5")
             return solution
 
     # Check in case an input returned more than one person from database

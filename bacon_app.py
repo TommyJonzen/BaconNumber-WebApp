@@ -16,6 +16,7 @@ def main_query(star1, star2, override=0):
 
         # Checking names are valid & that no more than one name is returned from database for each input
         checker = input_check.input_check(person, person2)
+        print("check: ", checker)
         if isinstance(checker[0], int):
             solution = checker
             return solution
