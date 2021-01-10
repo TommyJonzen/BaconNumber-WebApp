@@ -1,10 +1,13 @@
-# Bacon Query
+<h1 style="text-align: center">Bacon Query</h1>
 
+<p align="center">
 Bacon query is a python application that allows you to find the fastest route between two film stars.
+</p>
 <p align="center">
   <img src="https://media.giphy.com/media/d7PjHPTeWBYsNyIbB1/giphy.gif" alt="animated" width="550;" />
 </p>
 
+<br>
 
 ## How to setup
 
