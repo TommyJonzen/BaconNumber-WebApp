@@ -1,4 +1,4 @@
-<h1 style="text-align: center">Bacon Query</h1>
+# Bacon Query
 
 <p align="center">
 Bacon query is a python application that allows you to find the fastest route between two film stars.
@@ -12,9 +12,9 @@ Bacon query is a python application that allows you to find the fastest route be
 ## How to setup
 
 ### Required:
-An installation of Python 3
-An installation of Git
-An installation of pipenv (pip install pipenv)
+- An installation of Python 3
+- An installation of Git
+- An installation of pipenv (pip install pipenv)
 
 ### Full process from clone to running Bacon Query
 
