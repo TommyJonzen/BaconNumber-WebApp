@@ -1,27 +1,24 @@
 # Bacon Query
 
 Bacon query is a python application that allows you to find the fastest route between two film stars.
-
+![Bacon Query Gif](https://media.giphy.com/media/d7PjHPTeWBYsNyIbB1/giphy.gif)
 
 ## How to setup
 
-Required:
+### Required:
 An installation of Python 3
+An installation of Git
+An installation of pipenv (pip install pipenv)
 
+### Full process from clone to running Bacon Query
 
-### Install a flask virtual environment in the baconquery folder:
+- In your terminal navigate to where you would like to clone this repository
+- git clone https://github.com/TommyJonzen/BaconNumber-WebApp.git
+- cd BaconNumber-WebApp
+- pipenv install
+- flask run
 
-change directory into baconquery
-then use the following commands:
-
-* py  -m venv bacon-env
-* bacon-env\Scripts\activate
-* pip install flask
-* set FLASK_APP=application.py
-* cd ..
-* flask run
-
-Now you can use the IP address given by the console in your browser to visit a locally hosted version.
+Now you can use the IP address given by the console, enter it into your browser to visit a locally hosted version.
 
 
 ## How to use
