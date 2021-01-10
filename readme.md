@@ -19,10 +19,10 @@ Bacon query is a python application that allows you to find the fastest route be
 ### Full process from clone to running Bacon Query
 
 - In your terminal navigate to where you would like to clone this repository
-- git clone https://github.com/TommyJonzen/BaconNumber-WebApp.git
-- cd BaconNumber-WebApp
-- pipenv install
-- flask run
+- **git clone https://github.com/TommyJonzen/BaconNumber-WebApp.git**
+- **cd BaconNumber-WebApp**
+- **pipenv install**
+- **flask run**
 
 Now you can use the IP address given by the console, enter it into your browser to visit a locally hosted version.
 
